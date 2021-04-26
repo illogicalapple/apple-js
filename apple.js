@@ -1,7 +1,7 @@
 function apple(query) {
 	let elements = document.querySelectorAll(query);
 	return {
-		"style": (name, value) => {
+		"style": function(name, value) {
 			elements.forEach(element => {
 				if(value) {
 					element.style.setProperty(name, value);
@@ -10,7 +10,7 @@ function apple(query) {
 				}
 			});
 		},
-		"attribute": (name, value) => {
+		"attribute": function(name, value) {
 			elements.forEach(element => {
 				if(value) {
 					element.setAttribute(name, value);
@@ -20,27 +20,27 @@ function apple(query) {
 			});
 		},
 		"length": elements.length,
-		"hide": () => {
+		"hide": function() {
 			elements.forEach(element => {
 				element.style.display = "none";
 			});
 		},
-		"show": () => {
+		"show": function() {
 			elements.forEach(element => {
 				element.style.display = "";
 			});
 		},
-		"remove": () => {
+		"remove": function() {
 			elements.forEach(element => {
 				element.remove();
 			});
 		},
-		"append": (...items) => {
+		"append": function(...items) {
 			elements.forEach(element => {
 				element.innerHTML = element.innerHTML + items.join("");
 			});
 		},
-		"prepend": (...items) => {
+		"prepend": function() {
 			elements.forEach(element => {
 				element.innerHTML = items.join("") + element.innerHTML;
 			});
@@ -62,10 +62,23 @@ function apple(query) {
 			});
 		},
 		"forEach": script => elements.forEach(script),
-		"on": (event, handler) => {
+		"on": function(event, handler) {
 			elements.forEach(element => {
 				element.addEventListener(event, handler);
 			});
 		}
 	};
 }
+Object.defineProperties(apple, {
+	"download": {
+		"value": function(filename, contents) {
+			let element = document.createElement("a");
+			element.setAttribute("href", "data:text/plain;base64," + window.btoa(contents));
+			element.setAttribute("download", filename);
+			document.body.appendChild(element);
+			element.click();
+			document.body.removeChild(element);
+		},
+		"writable": true
+	}
+});
