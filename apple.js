@@ -35,14 +35,36 @@ function apple(query) {
 				element.remove();
 			});
 		},
-		"append": function(...items) {
+		"append": function(append) {
+			switch(Object.getPrototypeOf(append).constructor.name) {
+				case "HTMLElement":
+					let string = append.outerHTML;
+					break;
+				case "Text":
+					let string = apple.escapeHTML(append.nodeValue);
+					break;
+				default:
+					let string = append;
+					break;
+			}
 			elements.forEach(element => {
-				element.innerHTML = element.innerHTML + items.join("");
+				element.innerHTML = element.innerHTML + string;
 			});
 		},
-		"prepend": function() {
+		"prepend": function(prepend) {
+			switch(Object.getPrototypeOf(prepend).constructor.name) {
+				case "HTMLElement":
+					let string = prepend.outerHTML;
+					break;
+				case "Text":
+					let string = apple.escapeHTML(prepend.nodeValue);
+					break;
+				default:
+					let string = prepend;
+					break;
+			}
 			elements.forEach(element => {
-				element.innerHTML = items.join("") + element.innerHTML;
+				element.innerHTML = string + element.innerHTML;
 			});
 		},
 		get html() {
@@ -80,5 +102,17 @@ Object.defineProperties(apple, {
 			document.body.removeChild(element);
 		},
 		"writable": true
+	},
+	"escapeHTML": {
+		"value": function(unsafe) {
+			return unsafe
+				.replaceAll("&", "&amp;")
+				.replaceAll("<", "&lt;")
+				.replaceAll(">", "&gt;")
+				.replaceAll("\"", "&quot;")
+				.replaceAll("'", "&#039;");
+ 		},
+		"writable": true
 	}
+ }
 });
