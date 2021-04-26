@@ -36,35 +36,13 @@ function apple(query) {
 			});
 		},
 		"append": function(append) {
-			switch(Object.getPrototypeOf(append).constructor.name) {
-				case "HTMLElement":
-					let string = append.outerHTML;
-					break;
-				case "Text":
-					let string = apple.escapeHTML(append.nodeValue);
-					break;
-				default:
-					let string = append;
-					break;
-			}
 			elements.forEach(element => {
-				element.innerHTML = element.innerHTML + string;
+				element.innerHTML = element.innerHTML + append;
 			});
 		},
 		"prepend": function(prepend) {
-			switch(Object.getPrototypeOf(prepend).constructor.name) {
-				case "HTMLElement":
-					let string = prepend.outerHTML;
-					break;
-				case "Text":
-					let string = apple.escapeHTML(prepend.nodeValue);
-					break;
-				default:
-					let string = prepend;
-					break;
-			}
 			elements.forEach(element => {
-				element.innerHTML = string + element.innerHTML;
+				element.innerHTML = prepend + element.innerHTML;
 			});
 		},
 		get html() {
@@ -114,5 +92,4 @@ Object.defineProperties(apple, {
  		},
 		"writable": true
 	}
- }
 });
