@@ -66,6 +66,13 @@ function apple(query) {
 			elements.forEach(element => {
 				element.addEventListener(event, handler);
 			});
+		},
+		"event": details => {
+			let other = details;
+			delete other.name;
+			elements.forEach(element => {
+				element.dispatchEvent(new CustomEvent(details.name, other));
+			});
 		}
 	};
 }
